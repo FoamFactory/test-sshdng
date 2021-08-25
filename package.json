@@ -1,6 +1,6 @@
 {
   "name": "test-sshdng",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "contributors": [
     {
       "name": "Scott Johnson",
@@ -24,7 +24,7 @@
     "url": "https://github.com/foamfactory/test-sshdng.git"
   },
   "description": "Launch a dummy ssh server on the local machine that can be used to run tests against.",
-  "main": "lib/test-sshd.js",
+  "main": "dist/main.bundle.js",
   "keywords": [
     "ssh2",
     "sshd",

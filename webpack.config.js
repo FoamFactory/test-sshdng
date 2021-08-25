@@ -6,8 +6,10 @@ module.exports = {
   mode: 'development',
   target: 'node',
   output: {
-    filename: 'main.js',
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
+    library: 'test-sshdng',
+    libraryTarget: 'umd'
   },
   module: {
     rules: [
