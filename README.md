@@ -15,43 +15,42 @@ It starts an ssh server on the `localhost` such that:
   - (mode: `echo`) if login succeeds it uses `ForceCommand` to echo the command in `$SSH_ORIGINAL_COMMAND`
   - (mode: `exec`) if login succeeds it executes the command
   - (mode: `transfer`) if login succeeds it allows for `sftp` transfers
-- it does NOT do password authentication
+- it does NOT do password authentication. You must use a private key
 
 # Usage
 ```
-var TestSshd = require('test-sshd');
-var sshd = TestSshd({port: 4000};
+import { TestSSHD } from 'test-sshdng';
 
-var connectParams = sshd.connectParams();
+const sshd = TestSSHD({port: 4000};
+const connectParams = sshd.connectParams();
 
-sshd.on('ready', function() {
-  // When login is working
+sshd.on('ready', () => {
   console.log('ready to login');
 });
 
-sshd.on('error', function(error) {
+sshd.on('error', (error) => {
   // When sshd has an error
 });
 
-sshd.on('stdout', function(data) {
+sshd.on('stdout', (data) => {
   // receive sshd stdout
 });
 
-sshd.on('stderr', function(data) {
+sshd.on('stderr', (data) => {
   // receive sshd stderr
 });
 
-sshd.on('exit', function() {
+sshd.on('exit', () => {
   // when daemon exit
 });
 
 sshd.start();
 
-// Make sure to stop the sshd stop when the process exits
+// Make sure to stop the ssh server when the process exits
 // This prevents orphaned processes
 process.on('exit', function() {
   if(sshd.status === 'started') {
-    sshd.stop();
+    sshd.stop(); // this returns a promise if you want to wait for it to resolve
   }
 });
 ```
@@ -59,19 +58,19 @@ process.on('exit', function() {
 # Code information
 ## Getters
 - `status`: either 'started' or 'stopped'
-- `settings`: contains params used to initialize the sshd
+- `settings`: contains params used to initialize the ssh server
 
 ## Options
-- `port`: **integer** defdults to 4000
+- `port`: **integer** defaults to `4000`
 - `mode`: **string** default to `echo` (other options are `exec`, `transfer`)
 
 ## Events
-- `ready`: when the sshd is succesfully listening
-- `exit`: when the sshd exits
+- `ready`: when the ssh server is successfully listening
+- `exit`: when the ssh server exits
 - `error`: when an error occurs
 
 ## ConnectParams()
-This is a hash with;
+Returns an object with the following members:
 
 - `host` : **string** host to connect to
 - `username`: **string** username to connect with
@@ -79,4 +78,4 @@ This is a hash with;
 - `privateKey`: **string** key that can be used to connect
 
 # License
-MIT
+See [LICENSE.md](LICENSE.md).
