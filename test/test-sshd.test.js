@@ -1,10 +1,25 @@
-import { TestSSHD } from '../src/test-sshd.js';
-import Connection from 'ssh2';
+import { existsSync, copyFileSync } from 'fs';
+import path from 'path';
 import process from 'process';
-
-// let ssh_server = null;
+import mkdirp from 'mkdirp';
+import Connection from 'ssh2';
+import { TestSSHD } from '../src/test-sshd.js';
 
 describe ('TestSSHD', () => {
+  beforeAll(() => {
+    // verify that an id_rsa key exists, and, if not, then install one
+    // this is especially important for CI running
+    const sshDir = path.join('/home', process.env.USER, '.ssh');
+    const idRsa = path.join(sshDir, 'id_rsa');
+    const localIdRsa = path.normalize(path.join(__dirname, '..', 'config', 'keys', 'id_rsa'));
+    // if (!existsSync(idRsa)) {
+    //   mkdirp(sshDir);
+    //   copyFileSync(localIdRsa, idRsa);
+    // }
+
+    expect(existsSync(idRsa)).toBeTruthy();
+  });
+
   it ('should be able to instantiate the object', () => {
     let ssh_server = new TestSSHD({
       port: 4001
@@ -78,6 +93,7 @@ describe ('TestSSHD', () => {
         });
 
         const connectParams = ssh_server.connectParams();
+        console.log(`Connection parameters: `, connectParams);
 
         let conn = new Connection();
         conn.on('ready', () => {

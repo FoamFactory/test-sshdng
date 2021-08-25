@@ -54,6 +54,7 @@
     "jest": "^27.0.6",
     "jscoverage": "*",
     "jshint": "*",
+    "mkdirp": "^1.0.4",
     "mocha": "*",
     "sinon": "~1.7.3",
     "sinon-chai": "~2.4.0",

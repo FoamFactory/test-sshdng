@@ -7,17 +7,16 @@ on:
 jobs:
   # Set the job key. The key is displayed as the job name
   # when a job name is not provided
-  build-and-publish:
+  build-and-test:
     # Name the Job
-    name: Build and Publish Release
+    name: Build and Publish
     # Set the type of machine to run on
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.20.2]
+        node-version: [14.17.5]
 
     steps:
-      # jq is needed for the package-bump-version script
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -27,11 +26,15 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_ACCESS_TOKEN }}
       - name: Checkout Codebase
         uses: actions/checkout@v2
+      - name: Show environment variables
+        run: env
       - name: Install Dependencies
         run: yarn install --production=false
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_ACCESS_TOKEN }}
       - name: Run Build Script
         run: yarn build
-      - name: Run Test Framework
-        run: yarn test
+      - name: Publish to npm
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
