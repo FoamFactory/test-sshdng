@@ -1,23 +1,23 @@
 name: Build and Publish Release
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [released, edited]
 
 jobs:
   # Set the job key. The key is displayed as the job name
   # when a job name is not provided
-  build-and-test:
+  build-and-publish:
     # Name the Job
-    name: Build and Test
+    name: Build and Publish Release
     # Set the type of machine to run on
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.17.5]
+        node-version: [12.20.2]
 
     steps:
+      # jq is needed for the package-bump-version script
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
