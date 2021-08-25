@@ -7,11 +7,11 @@ import process from 'process';
 describe ('TestSSHD', () => {
   it ('should be able to instantiate the object', () => {
     let ssh_server = new TestSSHD({
-      port: 4003
+      port: 4001
     });
 
     expect(ssh_server.settings).toBeDefined();
-    expect(ssh_server.settings.port).toBe(4003);
+    expect(ssh_server.settings.port).toBe(4001);
     expect(ssh_server.settings.privateKey).toBeDefined();
     expect(ssh_server.settings.host).toBe('127.0.0.1');
     expect(ssh_server.status).toBe('stopped');
@@ -45,7 +45,7 @@ describe ('TestSSHD', () => {
         '5FdKJgIr7z5PU1ZCSUGAtGhWn8NqqhBsnB1MyI1LMAwgO7AssANdUC3N2+3BN5h7\n' +
         'iHnoIfQfy/3G68r75XyrX+E9G9KcmNDz0MdYxMP4Zw85pPYGipMW\n' +
         '-----END RSA PRIVATE KEY-----\n',
-      port: 4003
+      port: 4001
     });
   });
 
@@ -54,7 +54,7 @@ describe ('TestSSHD', () => {
       expect(() => {
         new TestSSHD({
           mode: 'something-strange',
-          port: 4005
+          port: 4003
         })
       }).toThrow('Unknown mode: "something-strange". Please choose one of ["expect","echo","exec","transfer"]');
     });
@@ -63,7 +63,8 @@ describe ('TestSSHD', () => {
   describe ('with a fully operational server running in default mode', () => {
     it ('should be able to launch the server and immediately close it', () => {
         let ssh_server = new TestSSHD({
-          port: 4003
+          port: 4004,
+          debug: true
         });
 
         ssh_server.start();
@@ -73,7 +74,7 @@ describe ('TestSSHD', () => {
     it ('should be able to login', () => {
       return new Promise((resolve, reject) => {
         let ssh_server = new TestSSHD({
-          port: 4003
+          port: 4005
         });
 
         const connectParams = ssh_server.connectParams();
@@ -84,11 +85,17 @@ describe ('TestSSHD', () => {
         });
 
         conn.on('error', (err) => {
-          reject(err);
+          ssh_server.stop().then(() => {
+            reject(err);
+          });
         });
 
         ssh_server.on('ready', () => {
           conn.connect(connectParams);
+        });
+
+        ssh_server.on('error', (err) => {
+          reject(err);
         });
 
         ssh_server.start();
@@ -99,7 +106,7 @@ describe ('TestSSHD', () => {
       it ('should echo the command send after logging in', () => {
         return new Promise((resolve, reject) => {
           const command = 'uptime';
-          const ssh_server = new TestSSHD({port: 4003, mode: 'echo'});
+          const ssh_server = new TestSSHD({port: 4006, mode: 'echo'});
           const connectParams = ssh_server.connectParams();
 
           let conn = new Connection();
@@ -125,6 +132,12 @@ describe ('TestSSHD', () => {
           });
 
           conn.on('error', (err) => {
+            ssh_server.stop().then(() => {
+              reject(err);
+            });
+          });
+
+          ssh_server.on('error', (err) => {
             reject(err);
           });
 
@@ -141,7 +154,7 @@ describe ('TestSSHD', () => {
       it ('should return the result of running a command', () => {
         return new Promise((resolve, reject) => {
           const command = 'whoami';
-          const ssh_server = new TestSSHD({port: 4003, mode: 'exec'});
+          const ssh_server = new TestSSHD({port: 4007, mode: 'exec'});
           const connectParams = ssh_server.connectParams();
 
           let conn = new Connection();
@@ -166,6 +179,12 @@ describe ('TestSSHD', () => {
           });
 
           conn.on('error', (err) => {
+            ssh_server.stop().then(() => {
+              reject(err);
+            });
+          });
+
+          ssh_server.on('error', (err) => {
             reject(err);
           });
 
@@ -185,7 +204,7 @@ describe ('TestSSHD', () => {
     describe ('with a fully operational server running in transfer mode', () => {
       it ('should allow access to the home directory of the user', () => {
         return new Promise((resolve, reject) => {
-          const ssh_server = new TestSSHD({port: 4003, mode: 'transfer'});
+          const ssh_server = new TestSSHD({port: 4008, mode: 'transfer'});
           const homeDir = process.env.HOME;
           const connectParams = ssh_server.connectParams();
 
@@ -207,7 +226,9 @@ describe ('TestSSHD', () => {
           });
 
           conn.on('error', (err) => {
-            reject(err);
+            ssh_server.stop().then(() => {
+              reject(err);
+            });
           });
 
           ssh_server.on('ready', () => {
