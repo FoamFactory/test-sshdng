@@ -17,7 +17,8 @@
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "generate:changelog": "gitmoji-changelog --output docs/CHANGELOG.md"
   },
   "repository": {
     "type": "git",
@@ -44,6 +45,7 @@
     "chai": "~1.7.2",
     "docco": "^0.8.1",
     "expect.js": "~0.2.0",
+    "gitmoji-changelog": "^2.2.1",
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-watch": "~0.4.4",
