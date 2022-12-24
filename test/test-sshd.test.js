@@ -2,7 +2,7 @@ import { existsSync, copyFileSync } from 'fs';
 import path from 'path';
 import process from 'process';
 import mkdirp from 'mkdirp';
-import Connection from 'ssh2';
+import { Client } from 'ssh2';
 import { TestSSHD } from '../src/test-sshd.js';
 
 describe ('TestSSHD', () => {
@@ -93,9 +93,8 @@ describe ('TestSSHD', () => {
         });
 
         const connectParams = ssh_server.connectParams();
-        console.log(`Connection parameters: `, connectParams);
 
-        let conn = new Connection();
+        let conn = new Client();
         conn.on('ready', () => {
           ssh_server.stop().then(resolve);
         });
@@ -125,7 +124,7 @@ describe ('TestSSHD', () => {
           const ssh_server = new TestSSHD({port: 4006, mode: 'echo'});
           const connectParams = ssh_server.connectParams();
 
-          let conn = new Connection();
+          let conn = new Client();
           conn.on('ready', () => {
             conn.exec(command, {}, (err, stream) => {
               if (err) {
@@ -173,7 +172,7 @@ describe ('TestSSHD', () => {
           const ssh_server = new TestSSHD({port: 4007, mode: 'exec'});
           const connectParams = ssh_server.connectParams();
 
-          let conn = new Connection();
+          let conn = new Client();
           conn.on('ready',function() {
             conn.exec(command, {}, (err, stream) => {
               if (err) {
@@ -224,7 +223,7 @@ describe ('TestSSHD', () => {
           const homeDir = process.env.HOME;
           const connectParams = ssh_server.connectParams();
 
-          var conn = new Connection();
+          var conn = new Client();
           conn.on('ready', () => {
             conn.sftp((err, sftp) => {
               if (err) {

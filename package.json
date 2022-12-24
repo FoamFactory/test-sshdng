@@ -1,6 +1,6 @@
 {
   "name": "test-sshdng",
-  "version": "0.0.3-dev",
+  "version": "0.0.4",
   "contributors": [
     {
       "name": "Scott Johnson",
@@ -60,7 +60,7 @@
     "mocha": "*",
     "sinon": "~1.7.3",
     "sinon-chai": "~2.4.0",
-    "ssh2": "~0.2.12",
+    "ssh2": "1.11.0",
     "webpack": "^5.51.1",
     "webpack-cli": "^4.8.0"
   },
@@ -69,7 +69,7 @@
     "node": ">=0.10"
   },
   "volta": {
-    "node": "14.17.5",
+    "node": "12.18.4",
     "yarn": "1.22.11"
   }
 }
