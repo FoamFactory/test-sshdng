@@ -1,5 +1,17 @@
 # Changelog
 
+<a name="0.0.4"></a>
+## 0.0.4 (2022-12-24)
+
+### Features
+
+- 👷‍♂️ Disable build_and_test from running. [[b3b126a](https://github.com/foamfactory/test-sshdng/commit/b3b126a622760dee22de69bc6ab180935d72e8e3)]
+
+### Dependency Changes
+
+- ⬆️ Update version of ssh2 to resolve key algorithm errors. [[9dd1759](https://github.com/foamfactory/test-sshdng/commit/9dd1759d6f65bf50dda1565ad25662b54ea5efa0)]
+
+
 <a name="0.0.2"></a>
 ## 0.0.2
 
