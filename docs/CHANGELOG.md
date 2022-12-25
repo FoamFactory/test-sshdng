@@ -1,11 +1,14 @@
 # Changelog
 
-<a name="0.0.4"></a>
-## 0.0.4 (2022-12-24)
+<a name="0.0.5"></a>
+## 0.0.5 (2022-12-25)
 
-### Features
+### Security Updates
 
-- 👷‍♂️ Disable build_and_test from running. [[b3b126a](https://github.com/foamfactory/test-sshdng/commit/b3b126a622760dee22de69bc6ab180935d72e8e3)]
+- 🔒 Add ssh-dss to accepted host key algorithms. [[3d6786a](https://github.com/foamfactory/test-sshdng/commit/3d6786ac4c6c1c41cfd3391f9673c374d6f16ac0)]
+
+
+- 📖 Update changelog to account for next release. [[ea89b68](https://github.com/foamfactory/test-sshdng/commit/ea89b6876e7a275cc8ec86ad51e900b905ebf7d6)]
 
 ### Dependency Changes
 
